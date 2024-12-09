@@ -41,19 +41,18 @@ namespace _1
         {
             get
             {
-                return new Point(
-                    (Point1.X + Point2.X + Point3.X + Point4.X) / 4,
-                    (Point1.Y + Point2.Y + Point3.Y + Point4.Y) / 4
-                );
+                return basePoint;
             }
         }
 
-        public TQuadrangle(Point basePoint, Point point2, Point point3, Point point4) : base(basePoint)
+        public TQuadrangle(Point point1, Point point2, Point point3, Point point4) : base((point1 + point2 + point3 + point4) / 4)
         {
-            this.point1 = basePoint;
-            this.point2 = point2;
-            this.point3 = point3;
-            this.point4 = point4;
+            Point basePoint = (point1 + point2 + point3 + point4) / 4;
+            
+            this.point1 = point1 - basePoint;
+            this.point2 = point2 - basePoint;
+            this.point3 = point3 - basePoint;
+            this.point4 = point4 - basePoint;
 
             MessageBox.Show($"TQuadrangle создан: точки ({point1.X}, {point1.Y}), ({point2.X}, {point2.Y}), ({point3.X}, {point3.Y}), ({point4.X}, {point4.Y})", "Alert");
         }
@@ -62,10 +61,10 @@ namespace _1
         {
             PointF[] points =
             {
-                new PointF(point1.X, point1.Y),
-                new PointF(point2.X, point2.Y),
-                new PointF(point3.X, point3.Y),
-                new PointF(point4.X, point4.Y)
+                new PointF(point1.X + basePoint.X, point1.Y + basePoint.Y),
+                new PointF(point2.X + basePoint.X, point2.Y + basePoint.Y),
+                new PointF(point3.X + basePoint.X, point3.Y + basePoint.Y),
+                new PointF(point4.X + basePoint.X, point4.Y + basePoint.Y)
             };
 
             g.DrawPolygon(Pens.Black, points);
@@ -75,10 +74,7 @@ namespace _1
         {
             double angleInRadians = Math.PI * angleInDegrees / 180.0;
 
-            Point center = new Point(
-                (Point1.X + Point2.X + Point3.X + Point4.X) / 4,
-                (Point1.Y + Point2.Y + Point3.Y + Point4.Y) / 4
-            );
+            Point center = new Point(0, 0);
 
             Point1 = RotatePoint(Point1, center, angleInRadians);
             Point2 = RotatePoint(Point2, center, angleInRadians);

@@ -22,6 +22,7 @@ namespace _1
         private List<TTrapezoid> ttrapezoids = new List<TTrapezoid>();
         private List<TRhombus> trhombuses = new List<TRhombus>();
         List<TQuadrangle> tquadrangles = new List<TQuadrangle>();
+        List<TFigure> tfigures = new List<TFigure>();
 
         public Form1()
         {
@@ -45,6 +46,7 @@ namespace _1
             moveMenu.DropDownItems.Add("Все отрезки", null, (s, e) => MoveAllLines());
             moveMenu.DropDownItems.Add("Все прямоугольники", null, (s, e) => MoveAllRectangles());
             moveMenu.DropDownItems.Add("Все кольца", null, (s, e) => MoveAllRings());
+            moveMenu.DropDownItems.Add("Все фигуры (TFigures)", null, (s, e) => MoveAllFigures());
 
             var modifyMenu = new ToolStripMenuItem("Изменить");
             modifyMenu.DropDownItems.Add("Размер всех окружностей", null, (s, e) => ChangeAllCirclesRadius());
@@ -82,14 +84,18 @@ namespace _1
         private void CreateTCircle()
         {
             Point point = new Point(random.Next(100, 400), random.Next(100, 400));
-            tcircles.Add(new TCircle(point, random.Next(20, 80)));
+            var tcircle = new TCircle(point, random.Next(20, 80));
+            tcircles.Add(tcircle);
+            tfigures.Add(tcircle);
             this.Invalidate();
         }
 
         private void CreateTEllipse()
         {
             Point p = new Point(random.Next(100, 400), random.Next(100, 400));
-            tellipses.Add(new TEllipse(p, random.Next(20, 80), random.Next(20, 80)));
+            var tellipse = new TEllipse(p, random.Next(20, 80), random.Next(20, 80));
+            tellipses.Add(tellipse);
+            tfigures.Add(tellipse);
             this.Invalidate();
         }
 
@@ -122,6 +128,7 @@ namespace _1
             var trectangle = new TRectangle(point, width, height);
             trectangles.Add(trectangle);
             tquadrangles.Add(trectangle);
+            tfigures.Add(trectangle);
             this.Invalidate();
         }
 
@@ -154,6 +161,7 @@ namespace _1
             var ttrapezoid = new TTrapezoid(point1, point2, point4, point3);
             ttrapezoids.Add(ttrapezoid);
             tquadrangles.Add(ttrapezoid);
+            tfigures.Add(ttrapezoid);
             this.Invalidate();
         }
 
@@ -168,6 +176,7 @@ namespace _1
 
             trhombuses.Add(trhombus);
             tquadrangles.Add(trhombus);
+            tfigures.Add(trhombus);
             this.Invalidate();
         }
 
@@ -294,6 +303,22 @@ namespace _1
         }
 
 
+        private void MoveAllFigures()
+        {
+            int deltaX = random.Next(-50, 50),
+                deltaY = random.Next(-50, 50);
+            
+
+            foreach (var tfigure in tfigures)
+            {
+                //int newX = tfigure.basePoint.X + deltaX;
+                //int newY = tfigure.basePoint.Y + deltaY;
+
+                tfigure.MoveTo(deltaX, deltaY);
+            }
+            this.Invalidate();
+        }
+
         private void ChangeAllCirclesRadius()
         {
             int menuHeight = this.MainMenuStrip != null ? this.MainMenuStrip.Height : 0;
@@ -371,32 +396,30 @@ namespace _1
 
             foreach (var tquadrangle in tquadrangles)
             {
-                Point rotatedPoint1 = tquadrangle.RotatePoint(tquadrangle.Point1, tquadrangle.Center, angle);
-                Point rotatedPoint2 = tquadrangle.RotatePoint(tquadrangle.Point2, tquadrangle.Center, angle);
-                Point rotatedPoint3 = tquadrangle.RotatePoint(tquadrangle.Point3, tquadrangle.Center, angle);
-                Point rotatedPoint4 = tquadrangle.RotatePoint(tquadrangle.Point4, tquadrangle.Center, angle);
+                //Point rotatedPoint1 = tquadrangle.RotatePoint(tquadrangle.Point1, tquadrangle.Center, angle);
+                //Point rotatedPoint2 = tquadrangle.RotatePoint(tquadrangle.Point2, tquadrangle.Center, angle);
+                //Point rotatedPoint3 = tquadrangle.RotatePoint(tquadrangle.Point3, tquadrangle.Center, angle);
+                //Point rotatedPoint4 = tquadrangle.RotatePoint(tquadrangle.Point4, tquadrangle.Center, angle);
 
-                bool isOutOfBounds = rotatedPoint1.X < 0 || rotatedPoint1.X > this.ClientSize.Width ||
-                                     rotatedPoint1.Y < menuHeight || rotatedPoint1.Y > this.ClientSize.Height ||
-                                     rotatedPoint2.X < 0 || rotatedPoint2.X > this.ClientSize.Width ||
-                                     rotatedPoint2.Y < menuHeight || rotatedPoint2.Y > this.ClientSize.Height ||
-                                     rotatedPoint3.X < 0 || rotatedPoint3.X > this.ClientSize.Width ||
-                                     rotatedPoint3.Y < menuHeight || rotatedPoint3.Y > this.ClientSize.Height ||
-                                     rotatedPoint4.X < 0 || rotatedPoint4.X > this.ClientSize.Width ||
-                                     rotatedPoint4.Y < menuHeight || rotatedPoint4.Y > this.ClientSize.Height;
+                //bool isOutOfBounds = rotatedPoint1.X < 0 || rotatedPoint1.X > this.ClientSize.Width ||
+                //                     rotatedPoint1.Y < menuHeight || rotatedPoint1.Y > this.ClientSize.Height ||
+                //                     rotatedPoint2.X < 0 || rotatedPoint2.X > this.ClientSize.Width ||
+                //                     rotatedPoint2.Y < menuHeight || rotatedPoint2.Y > this.ClientSize.Height ||
+                //                     rotatedPoint3.X < 0 || rotatedPoint3.X > this.ClientSize.Width ||
+                //                     rotatedPoint3.Y < menuHeight || rotatedPoint3.Y > this.ClientSize.Height ||
+                //                     rotatedPoint4.X < 0 || rotatedPoint4.X > this.ClientSize.Width ||
+                //                     rotatedPoint4.Y < menuHeight || rotatedPoint4.Y > this.ClientSize.Height;
 
-                if (isOutOfBounds)
-                {
-                    continue;
-                }
+                //if (isOutOfBounds)
+                //{
+                //    continue;
+                //}
 
                 tquadrangle.Rotate(angle);
             }
 
             this.Invalidate();
         }
-
-
 
         private void ChangeAllRingsRadius()
         {
@@ -560,25 +583,25 @@ namespace _1
                 ring.Show(e.Graphics);
             }
 
-            foreach (var tcircle in tcircles)
-            {
-                tcircle.Show(e.Graphics);
-            }
-
-            foreach (var tellipse in tellipses)
-            {
-                tellipse.Show(e.Graphics);
-            }
-
-            foreach (var tquadrangle in tquadrangles)
-            {
-                tquadrangle.Show(e.Graphics);
-            }
-
-            //foreach (var tк in ttrapezoids)
+            //foreach (var tcircle in tcircles)
             //{
-            //    ttrapezoid.Show(e.Graphics);
+            //    tcircle.Show(e.Graphics);
             //}
+
+            //foreach (var tellipse in tellipses)
+            //{
+            //    tellipse.Show(e.Graphics);
+            //}
+
+            //foreach (var tquadrangle in tquadrangles)
+            //{
+            //    tquadrangle.Show(e.Graphics);
+            //}
+
+            foreach (var tfigure in tfigures)
+            {
+                tfigure.Show(e.Graphics);
+            }
         }
 
         public static void start()
