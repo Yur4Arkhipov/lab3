@@ -22,5 +22,11 @@ namespace _1
 
         public abstract void Show(Graphics g);
         public abstract void MoveTo(int deltaX, int deltaY);
+
+        public virtual List<Point> GetPointsAfterMove(int deltaX, int deltaY)
+        {
+            return new List<Point>();
+        }
+
     }
 }

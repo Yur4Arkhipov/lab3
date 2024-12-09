@@ -70,6 +70,20 @@ namespace _1
             g.DrawPolygon(Pens.Black, points);
         }
 
+        public override List<Point> GetPointsAfterMove(int deltaX, int deltaY)
+        {
+            List<Point> points = new List<Point>
+            {
+                new Point(Point1.X + basePoint.X + deltaX, Point1.Y + basePoint.Y + deltaY),
+                new Point(Point2.X + basePoint.X + deltaX, Point2.Y + basePoint.Y + deltaY),
+                new Point(Point3.X + basePoint.X + deltaX, Point3.Y + basePoint.Y + deltaY),
+                new Point(Point4.X + basePoint.X + deltaX, Point4.Y + basePoint.Y + deltaY)
+            };
+
+            return points;
+        }
+
+
         public void Rotate(double angleInDegrees)
         {
             double angleInRadians = Math.PI * angleInDegrees / 180.0;

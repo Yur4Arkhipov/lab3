@@ -303,21 +303,57 @@ namespace _1
         }
 
 
+        //private void MoveAllFigures()
+        //{
+        //    int deltaX = random.Next(-50, 50),
+        //        deltaY = random.Next(-50, 50);
+
+
+        //    foreach (var tfigure in tfigures)
+        //    {
+        //        //int newX = tfigure.basePoint.X + deltaX;
+        //        //int newY = tfigure.basePoint.Y + deltaY;
+
+        //        tfigure.MoveTo(deltaX, deltaY);
+        //    }
+        //    this.Invalidate();
+        //}
+
         private void MoveAllFigures()
         {
             int deltaX = random.Next(-50, 50),
                 deltaY = random.Next(-50, 50);
-            
 
             foreach (var tfigure in tfigures)
             {
-                //int newX = tfigure.basePoint.X + deltaX;
-                //int newY = tfigure.basePoint.Y + deltaY;
+                int newX = tfigure.basePoint.X + deltaX;
+                int newY = tfigure.basePoint.Y + deltaY;
+
+                if (IsOutOfBounds(tfigure, deltaX, deltaY))
+                {
+                    continue;
+                }
 
                 tfigure.MoveTo(deltaX, deltaY);
             }
+
             this.Invalidate();
         }
+
+        private bool IsOutOfBounds(TFigure figure, int deltaX, int deltaY)
+        {
+            var points = figure.GetPointsAfterMove(deltaX, deltaY);
+            int minX = points.Min(p => p.X);
+            int maxX = points.Max(p => p.X);
+            int minY = points.Min(p => p.Y);
+            int maxY = points.Max(p => p.Y);
+
+            int menuHeight = this.MainMenuStrip != null ? this.MainMenuStrip.Height : 0;
+
+            return minX < 0 || maxX > this.ClientSize.Width ||
+                   minY < menuHeight || maxY > this.ClientSize.Height;
+        }
+
 
         private void ChangeAllCirclesRadius()
         {
@@ -388,38 +424,76 @@ namespace _1
             this.Invalidate();
         }
 
+        //private void RotateAllQuadrangles()
+        //{
+        //    int menuHeight = this.MainMenuStrip != null ? this.MainMenuStrip.Height : 0;
+        //    int angle = random.Next(10, 90);
+        //    //foreach (var trectangle in trectangles) { tquadrangles.Add(trectangle); }
+
+        //    foreach (var tquadrangle in tquadrangles)
+        //    {
+        //        //Point rotatedPoint1 = tquadrangle.RotatePoint(tquadrangle.Point1, tquadrangle.Center, angle);
+        //        //Point rotatedPoint2 = tquadrangle.RotatePoint(tquadrangle.Point2, tquadrangle.Center, angle);
+        //        //Point rotatedPoint3 = tquadrangle.RotatePoint(tquadrangle.Point3, tquadrangle.Center, angle);
+        //        //Point rotatedPoint4 = tquadrangle.RotatePoint(tquadrangle.Point4, tquadrangle.Center, angle);
+
+        //        //bool isOutOfBounds = rotatedPoint1.X < 0 || rotatedPoint1.X > this.ClientSize.Width ||
+        //        //                     rotatedPoint1.Y < menuHeight || rotatedPoint1.Y > this.ClientSize.Height ||
+        //        //                     rotatedPoint2.X < 0 || rotatedPoint2.X > this.ClientSize.Width ||
+        //        //                     rotatedPoint2.Y < menuHeight || rotatedPoint2.Y > this.ClientSize.Height ||
+        //        //                     rotatedPoint3.X < 0 || rotatedPoint3.X > this.ClientSize.Width ||
+        //        //                     rotatedPoint3.Y < menuHeight || rotatedPoint3.Y > this.ClientSize.Height ||
+        //        //                     rotatedPoint4.X < 0 || rotatedPoint4.X > this.ClientSize.Width ||
+        //        //                     rotatedPoint4.Y < menuHeight || rotatedPoint4.Y > this.ClientSize.Height;
+
+        //        //if (isOutOfBounds)
+        //        //{
+        //        //    continue;
+        //        //}
+
+        //        tquadrangle.Rotate(angle);
+        //    }
+
+        //    this.Invalidate();
+        //}
+
         private void RotateAllQuadrangles()
         {
             int menuHeight = this.MainMenuStrip != null ? this.MainMenuStrip.Height : 0;
             int angle = random.Next(10, 90);
-            //foreach (var trectangle in trectangles) { tquadrangles.Add(trectangle); }
 
             foreach (var tquadrangle in tquadrangles)
             {
-                //Point rotatedPoint1 = tquadrangle.RotatePoint(tquadrangle.Point1, tquadrangle.Center, angle);
-                //Point rotatedPoint2 = tquadrangle.RotatePoint(tquadrangle.Point2, tquadrangle.Center, angle);
-                //Point rotatedPoint3 = tquadrangle.RotatePoint(tquadrangle.Point3, tquadrangle.Center, angle);
-                //Point rotatedPoint4 = tquadrangle.RotatePoint(tquadrangle.Point4, tquadrangle.Center, angle);
+                Point rotatedPoint1 = tquadrangle.RotatePoint(tquadrangle.Point1, new Point(0, 0), angle);
+                Point rotatedPoint2 = tquadrangle.RotatePoint(tquadrangle.Point2, new Point(0, 0), angle);
+                Point rotatedPoint3 = tquadrangle.RotatePoint(tquadrangle.Point3, new Point(0, 0), angle);
+                Point rotatedPoint4 = tquadrangle.RotatePoint(tquadrangle.Point4, new Point(0, 0), angle);
 
-                //bool isOutOfBounds = rotatedPoint1.X < 0 || rotatedPoint1.X > this.ClientSize.Width ||
-                //                     rotatedPoint1.Y < menuHeight || rotatedPoint1.Y > this.ClientSize.Height ||
-                //                     rotatedPoint2.X < 0 || rotatedPoint2.X > this.ClientSize.Width ||
-                //                     rotatedPoint2.Y < menuHeight || rotatedPoint2.Y > this.ClientSize.Height ||
-                //                     rotatedPoint3.X < 0 || rotatedPoint3.X > this.ClientSize.Width ||
-                //                     rotatedPoint3.Y < menuHeight || rotatedPoint3.Y > this.ClientSize.Height ||
-                //                     rotatedPoint4.X < 0 || rotatedPoint4.X > this.ClientSize.Width ||
-                //                     rotatedPoint4.Y < menuHeight || rotatedPoint4.Y > this.ClientSize.Height;
+                bool isOutOfBounds = IsPointOutOfBounds(rotatedPoint1, tquadrangle.Center, menuHeight) ||
+                                     IsPointOutOfBounds(rotatedPoint2, tquadrangle.Center, menuHeight) ||
+                                     IsPointOutOfBounds(rotatedPoint3, tquadrangle.Center, menuHeight) ||
+                                     IsPointOutOfBounds(rotatedPoint4, tquadrangle.Center, menuHeight);
 
-                //if (isOutOfBounds)
-                //{
-                //    continue;
-                //}
+                if (isOutOfBounds)
+                {
+                    continue;
+                }
 
                 tquadrangle.Rotate(angle);
             }
 
             this.Invalidate();
         }
+
+        private bool IsPointOutOfBounds(Point rotatedPoint, Point center, int menuHeight)
+        {
+            int adjustedX = rotatedPoint.X + center.X;
+            int adjustedY = rotatedPoint.Y + center.Y;
+            return adjustedX < 0 || adjustedX > this.ClientSize.Width ||
+                   adjustedY < menuHeight || adjustedY > this.ClientSize.Height;
+        }
+
+
 
         private void ChangeAllRingsRadius()
         {
