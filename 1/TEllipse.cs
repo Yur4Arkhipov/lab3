@@ -32,6 +32,8 @@ namespace _1
         public override void Show(Graphics g)
         {
             g.DrawEllipse(Pens.Black, basePoint.X - semiMajorAxis, basePoint.Y - semiMinorAxis, semiMajorAxis * 2, semiMinorAxis * 2);
+            //g.DrawString($"Ellips:\n R({semiMajorAxis}, {semiMinorAxis})",
+                         //new Font("Arial", 6), Brushes.Black, basePoint.X - semiMinorAxis, basePoint.Y - semiMinorAxis);
         }
 
         public void Rotate90Degrees()

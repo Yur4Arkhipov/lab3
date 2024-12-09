@@ -32,6 +32,8 @@ namespace _1
         public override void Show(Graphics g)
         {
             g.DrawEllipse(Pens.Black, basePoint.X - radius, basePoint.Y - radius, radius * 2, radius * 2);
+            //g.DrawString($"Circle:\n R({Radius})",
+                         //new Font("Arial", 6), Brushes.Black, basePoint.X - Radius/2, basePoint.Y);
         }
 
         public void ChangeRadius(int newRadius)

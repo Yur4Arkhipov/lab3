@@ -18,6 +18,10 @@ namespace _1
 
         private List<TCircle> tcircles = new List<TCircle>();
         private List<TEllipse> tellipses = new List<TEllipse>();
+        private List<TRectangle> trectangles = new List<TRectangle>();
+        private List<TTrapezoid> ttrapezoids = new List<TTrapezoid>();
+        private List<TRhombus> trhombuses = new List<TRhombus>();
+        List<TQuadrangle> tquadrangles = new List<TQuadrangle>();
 
         public Form1()
         {
@@ -30,6 +34,9 @@ namespace _1
             createMenu.DropDownItems.Add("Эллипс (TEllipse)", null, (s, e) => CreateTEllipse());
             createMenu.DropDownItems.Add("Отрезок", null, (s, e) => CreateLine());
             createMenu.DropDownItems.Add("Прямоугольник", null, (s, e) => CreateRectangle());
+            createMenu.DropDownItems.Add("Прямоугольник (TRectangle)", null, (s, e) => CreateTRectangle());
+            createMenu.DropDownItems.Add("Трапеция (TTrapezoid)", null, (s, e) => CreateTTrapezoid());
+            createMenu.DropDownItems.Add("Ромб (TRhombus)", null, (s, e) => CreateTRhombus());
             createMenu.DropDownItems.Add("Кольцо", null, (s, e) => CreateRing());
 
 
@@ -43,6 +50,7 @@ namespace _1
             modifyMenu.DropDownItems.Add("Размер всех окружностей", null, (s, e) => ChangeAllCirclesRadius());
             modifyMenu.DropDownItems.Add("Размер всех окружностей (TCircles)", null, (s, e) => ChangeAllTCirclesRadius());
             modifyMenu.DropDownItems.Add("Повернуть эллипсы на 90 градусов (TEllipse)", null, (s, e) => RotateAllEllipses());
+            modifyMenu.DropDownItems.Add("Повернуть четырехугольники на n градусов (TQuadrangles)", null, (s, e) => RotateAllQuadrangles());
             modifyMenu.DropDownItems.Add("Размер всех прямоугольников", null, (s, e) => ChangeAllRectanglesSize());
             modifyMenu.DropDownItems.Add("Размер всех колец", null, (s, e) => ChangeAllRingsRadius());
 
@@ -105,6 +113,64 @@ namespace _1
             rectangles.Add(new RectangleShape(point, width, height));
             this.Invalidate();
         }
+
+        private void CreateTRectangle()
+        {
+            Point point = new Point(random.Next(100, 400), random.Next(100, 400));
+            int width = random.Next(50, 150);
+            int height = random.Next(30, 100);
+            var trectangle = new TRectangle(point, width, height);
+            trectangles.Add(trectangle);
+            tquadrangles.Add(trectangle);
+            this.Invalidate();
+        }
+
+        private void CreateTTrapezoid()
+        {
+            int x1 = random.Next(100, 300);
+            int y1 = random.Next(100, 200);
+            int x2 = random.Next(x1 + 50, 400);
+            int y2 = y1;
+     
+            int x3 = random.Next(100, 300);
+            int y3 = random.Next(300, 500); 
+            int x4 = random.Next(x3 + 50, 400);
+            int y4 = y3;
+
+            //if (x2 - x1 < x4 - x3)
+            //{
+            //    int tempX1 = x1, tempX2 = x2;
+            //    x1 = x3;
+            //    x2 = x4;
+            //    x3 = tempX1;
+            //    x4 = tempX2;
+            //}
+
+            Point point1 = new Point(x1, y1);
+            Point point2 = new Point(x2, y2);
+            Point point3 = new Point(x3, y3);
+            Point point4 = new Point(x4, y4);
+
+            var ttrapezoid = new TTrapezoid(point1, point2, point4, point3);
+            ttrapezoids.Add(ttrapezoid);
+            tquadrangles.Add(ttrapezoid);
+            this.Invalidate();
+        }
+
+        private void CreateTRhombus()
+        {
+            int centerX = random.Next(100, 400);
+            int centerY = random.Next(100, 400);
+
+            int distance1 = random.Next(50, 150);
+            int distance2 = random.Next(50, 150);
+            var trhombus = new TRhombus(new Point(centerX, centerY), distance1, distance2);
+
+            trhombuses.Add(trhombus);
+            tquadrangles.Add(trhombus);
+            this.Invalidate();
+        }
+
 
         private void CreateRing()
         {
@@ -297,6 +363,40 @@ namespace _1
             this.Invalidate();
         }
 
+        private void RotateAllQuadrangles()
+        {
+            int menuHeight = this.MainMenuStrip != null ? this.MainMenuStrip.Height : 0;
+            int angle = random.Next(10, 90);
+            //foreach (var trectangle in trectangles) { tquadrangles.Add(trectangle); }
+
+            foreach (var tquadrangle in tquadrangles)
+            {
+                Point rotatedPoint1 = tquadrangle.RotatePoint(tquadrangle.Point1, tquadrangle.Center, angle);
+                Point rotatedPoint2 = tquadrangle.RotatePoint(tquadrangle.Point2, tquadrangle.Center, angle);
+                Point rotatedPoint3 = tquadrangle.RotatePoint(tquadrangle.Point3, tquadrangle.Center, angle);
+                Point rotatedPoint4 = tquadrangle.RotatePoint(tquadrangle.Point4, tquadrangle.Center, angle);
+
+                bool isOutOfBounds = rotatedPoint1.X < 0 || rotatedPoint1.X > this.ClientSize.Width ||
+                                     rotatedPoint1.Y < menuHeight || rotatedPoint1.Y > this.ClientSize.Height ||
+                                     rotatedPoint2.X < 0 || rotatedPoint2.X > this.ClientSize.Width ||
+                                     rotatedPoint2.Y < menuHeight || rotatedPoint2.Y > this.ClientSize.Height ||
+                                     rotatedPoint3.X < 0 || rotatedPoint3.X > this.ClientSize.Width ||
+                                     rotatedPoint3.Y < menuHeight || rotatedPoint3.Y > this.ClientSize.Height ||
+                                     rotatedPoint4.X < 0 || rotatedPoint4.X > this.ClientSize.Width ||
+                                     rotatedPoint4.Y < menuHeight || rotatedPoint4.Y > this.ClientSize.Height;
+
+                if (isOutOfBounds)
+                {
+                    continue;
+                }
+
+                tquadrangle.Rotate(angle);
+            }
+
+            this.Invalidate();
+        }
+
+
 
         private void ChangeAllRingsRadius()
         {
@@ -390,9 +490,6 @@ namespace _1
             this.Invalidate();
         }
 
-
-
-
         private void CreateLinesArray()
         {
             lines.Clear();
@@ -472,6 +569,16 @@ namespace _1
             {
                 tellipse.Show(e.Graphics);
             }
+
+            foreach (var tquadrangle in tquadrangles)
+            {
+                tquadrangle.Show(e.Graphics);
+            }
+
+            //foreach (var tк in ttrapezoids)
+            //{
+            //    ttrapezoid.Show(e.Graphics);
+            //}
         }
 
         public static void start()
