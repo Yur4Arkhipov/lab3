@@ -305,16 +305,15 @@ namespace _1
 
         private void MoveAllFigures()
         {
-            int deltaX = random.Next(-50, 50),
-                deltaY = random.Next(-50, 50);
-            
+            int deltaX = random.Next(-50, 50);
+            int deltaY = random.Next(-50, 50);
 
-            foreach (var tfigure in tfigures)
+            using (Graphics g = this.CreateGraphics())
             {
-                //int newX = tfigure.basePoint.X + deltaX;
-                //int newY = tfigure.basePoint.Y + deltaY;
-
-                tfigure.MoveTo(deltaX, deltaY);
+                foreach (var tfigure in tfigures)
+                {
+                    tfigure.MoveTo(deltaX, deltaY, g);
+                }
             }
             this.Invalidate();
         }

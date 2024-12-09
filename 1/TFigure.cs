@@ -20,10 +20,11 @@ namespace _1
             MessageBox.Show($"TFigure создан: базовая точка ({this.basePoint.X}, {this.basePoint.Y})", "Alert");
         }
 
-        public abstract void Show(Graphics g);
-        public void MoveTo(int deltaX, int deltaY)
+        public virtual void Show(Graphics g) { }
+        public void MoveTo(int deltaX, int deltaY, Graphics g)
         {
             basePoint = new Point(basePoint.X + deltaX, basePoint.Y + deltaY);
+            Show(g);
         }
     }
 }
