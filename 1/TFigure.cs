@@ -21,9 +21,6 @@ namespace _1
         }
 
         public abstract void Show(Graphics g);
-        public void MoveTo(int deltaX, int deltaY)
-        {
-            basePoint = new Point(basePoint.X + deltaX, basePoint.Y + deltaY);
-        }
+        public abstract void MoveTo(int deltaX, int deltaY);
     }
 }

@@ -96,5 +96,9 @@ namespace _1
             return new Point(newX, newY);
         }
 
+        public override void MoveTo(int deltaX, int deltaY)
+        {
+            basePoint = new Point(basePoint.X + deltaX, basePoint.Y + deltaY);
+        }
     }
 }
