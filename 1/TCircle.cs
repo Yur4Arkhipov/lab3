@@ -40,5 +40,10 @@ namespace _1
         {
             Radius = newRadius;
         }
+
+        public override void MoveTo(int deltaX, int deltaY)
+        {
+            basePoint = new Point(basePoint.X + deltaX, basePoint.Y + deltaY);
+        }
     }
 }
